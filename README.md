@@ -9,6 +9,8 @@ M575 P1 S0 B57600
 ```
 ## Upgrading the firmware
 
+- Download the update
+- Rename it to update.img
 - Place the relevant update into the root of a FAT32 formatted SD card.
 - Power on the screen.
 - Apply the update.
