@@ -1,0 +1,320 @@
+/*
+ * ID.h
+ *
+ *  Created on: 2021年4月22日
+ *      Author: FLY
+ */
+
+#ifndef JNI_LOGIC_ID_H_
+#define JNI_LOGIC_ID_H_
+
+	  char key2[]="4937732348172104228,5062752348172104228,4988712348172104228,5070752348172104228,5168312348172104228"
+	  "4959312348172104228,4949312348172104228,5160312348172104228,4951972348172104228,4973512348172104228,4958762348172104228"
+	  "4973202348172104228,4970972348172104228,4924512348172104228,4925712348172104228,4974312348172104228,4988452348172104228"
+	  "5021222348172104228,4972442348172104228,4992742348172104228,514572131210148104228,516356131210148104228,4937282348172104228"
+	  "4852682348172104228,4751502348172104228,4786262348172104228,4929602348172104228,4746502348172104228,4968132348172104228"
+	  "391140754968105228,4922802348172104228,4934732348172104228,499512348172104228,4917512348172104228,5065492348172104228"
+	  "4940602348172104228,5361792348172104228,4851757113160105228,4913367113160105228,47468339130172105228,47586439130172105228"
+	  "45588739130172105228,39759439130172105228,39439539130172105228,47865839130172105228,47398439130172105228,47268739130172105228"
+	  "47755639130172105228,39579339130172105228,39649539130172105228,39525739130172105228,47116239130172105228,51468131210148104228"
+	  "4376571981108105228,39328639130172105228,47165639130172105228,45848539130172105228,39105039130172105228,39854439130172105228"
+	  "39954439130172105228,45518639130172105228,45496539130172105228,45446539130172105228,47805139130172105228,47615039130172105228"
+	  "47327639130172105228,37234339130172105228,47272339130172105228,47702339130172105228,47581939130172105228,34696139130172105228"
+	  "45464539130172105228,39188339130172105228,45844539130172105228,34454339130172105228,39269239130172105228,47798439130172105228"
+	  "47666339130172105228,45624539130172105228,39708239130172105228,34636239130172105228,48569739130172105228,34806239130172105228"
+	  "47828239130172105228,47568139130172105228,34856139130172105228,39645939130172105228,45625239130172105228,47364439130172105228"
+	  "37454639130172105228,39736839130172105228,39416839130172105228,45788739130172105228,47876139130172105228,4380201981108105228"
+	  "45238839130172105228,39153939130172105228,45568839130172105228,39643939130172105228,48479639130172105228,34763339130172105228"
+	  "45416839130172105228,47496339130172105228,47498839130172105228,3484239130172105228,39433139130172105228,45176839130172105228"
+	  "3975839130172105228,34637739130172105228,47633439130172105228,45363939130172105228,49587839130172105228,34173739130172105228,"
+	  "34207739130172105228,34347839130172105228,34294239130172105228,39445239130172105228,34204239130172105228,39753939130172105228,"
+	  "49521539130172105228,47976239130172105228,45698039130172105228,47626239130172105228,47546139130172105228,47113239130172105228,"
+	  "47511139130172105228,47895639130172105228,47326139130172105228,39234839130172105228,45655639130172105228,34463639130172105228,"
+	  "34394339130172105228,34767839130172105228,39644839130172105228,45184839130172105228,39905239130172105228,39515139130172105228,"
+	  "47271739130172105228,34233339130172105228,47501639130172105228,39143939130172105228,34633739130172105228,34237739130172105228"
+      "5490287113160105228,45926339130172105228,45596339130172105228,45816439130172105228,39745239130172105228,47386839130172105228"
+	  "45945739130172105228,47636739130172105228,39917639130172105228,47185739130172105228,45533339130172105228,39318339130172105228"
+      "39228739130172105228,34715939130172105228,34195939130172105228,45373339130172105228,4766839130172105228,39338239130172105228"
+	  "34886039130172105228,34366039130172105228,39914739130172105228,47401039130172105228,47551339130172105228,48539939130172105228"
+	  "4764939130172105228,45143439130172105228,39168239130172105228,39848239130172105228,39204439130172105228,47465839130172105228"
+	  "47388639130172105228,34376139130172105228,40629939130172105228,4537339130172105228,45286939130172105228,45497039130172105228"
+	  "4559839130172105228,39315839130172105228,39505939130172105228,47298639130172105228,347768339130172105228,34556039130172105228"
+	  "34553739130172105228,3922739130172105228,51784239130172105228,46273739130172105228,34435139130172105228,34126039130172105228"
+	  "34223639130172105228,34456139130172105228,39125939130172105228,37684239130172105228,34606939130172105228,39237739130172105228"
+      "47672839130172105228,45256839130172105228,34544739130172105228,47701439130172105228,39771739130172105228,47202839130172105228"
+	  "47202839130172105228,39477639130172105228,47806839130172105228,34886139130172105228,34125039130172105228,45644939130172105228"
+	  "39584239130172105228,49721639130172105228,47312639130172105228,45317739130172105228,45317739130172105228,37904139130172105228"
+      "39645539130172105228,39461839130172105228,45435839130172105228,34337939130172105228,3484839130172105228,47332539130172105228"
+      "45305839130172105228,47797739130172105228,45628539130172105228，39917539130172105228,47217739130172105228,45195939130172105228"
+      "3465139130172105228,34744939130172105228,47637739130172105228,34414939130172105228,45416539130172105228,46513739130172105228"
+      "34404939130172105228,39481639130172105228,34396939130172105228,47307839130172105228,34657039130172105228,45165939130172105228"
+      "45166039130172105228,34467039130172105228,47552639130172105228,46268939130172105228,39221839130172105228,34705039130172105228"
+	  "34277839130172105228,47611739130172105228,47511739130172105228,4060122072009696228,4088822072009696228,4049852072009696228"
+      "4023852072009696228,4068122072009696228,4028632072009696228,4083822072009696228,416082072009696228,4033852072009696228"
+      "4078812072009696228,4076822072009696228,4032912072009696228,3955992072009696228,4054592072009696228,4029912072009696228"
+      "4327862072009696228,4453862072009696228,4042852072009696228,4072652072009696228,3952982072009696228,4012632072009696228"
+	  "4422572072009696228,4047852072009696228,39507539130172105228,34277839130170105228,45276139130172105228,416082072009696228,"
+	  "4049852072009696228,47467739130172105228,34915039130172105228,4067122072009696228,415182072009696228,47903139130172105228,"
+	  "45226139130172105228,34365039130172105228,39688039130172105228,47282439130172105228,4078812072009696228,34686839130172105228,"
+	  "3954992072009696228,4031852072009696228,4041852072009696228,4433502072009696228,4051122072009696228,4341902072009696228,"
+      "3939962072009696228,416392072009696228,4023912072009696228,4449142072009696228,3961982072009696228,4313562072009696228"
+	  "4036852072009696228,4034122072009696228,4057852072009696228,4039852072009696228,4086822072009696228,4130162072009696228"
+	  "40329020720096962284069652072009696228,4025852072009696228,4081822072009696228,4060652072009696228,4026852072009696228"
+      "4050852072009696228,4087622072009696228,4055852072009696228,4336862072009696228,414882072009696228,3944982072009696228"
+      "4065822072009696228,4015632072009696228,4073822072009696228,4069822072009696228,4034852072009696228,4080652072009696228"
+	  "3979362072009696228,4051592072009696228,3964992072009696228,4352862072009696228,4040912072009696228,445782072009696228"
+	  "4083812072009696228,414472072009696228,4041902072009696228,4038902072009696228,4043122072009696228,4064652072009696228"
+	  "4023632072009696228,4076332072009696228,4472182151486896228,5766657120810496228,5688527120810496228,47451007120810496228"
+	  "4878627120810496228,50455419116596228,4772477120810496228,4067592072009696228,5579587120810496228,4441142072009696228,"
+      "5661127120810496228,49247919116596228,5695547120810496228,50447519116596228,416682072009696228,5696547120810496228"
+	  "5334277120810496228,4024902072009696228,5525307120810496228,5587677120810496228,5628537120810496228,4029902072009696228"
+	  "5643357120810496228,4739417120810496228,4722587120810496228,50555419116596228,50565419116596228,5647617120810496228"
+	  "546097120810496228,4090622072009696228,4054822072009696228,5481577120810496228,4732587120810496228,464844991316896228"
+	  "5640617120810496228,5541227120810496228,414082072009696228,4060822072009696228,446082072009696228,4081812072009696228"
+	"4062822072009696228,4082622072009696228,4044852072009696228,109207115723525360191,2340177636823423810,4810811316014417513530"
+	"3382462151486896228,215194234731310456237,762161442261922196134,231052246425015620287,18212986187631859150,143171282024848192183,"
+	"54103639130172105228,11837190225203219170195,155562041661052022502,20616620216415116111425,1962451273620230230200,"
+	"502361612441227249225,567215991316896228,6414219620661188211239,144160163164213502491,4743737120810496228,2815916920818413514356,"
+	"284763967120810496228,1492107215962169854,5624377120810496228,2218918372441575521,671501871356823211681";
+
+
+	  	typedef struct {
+	  		const char* mainText;
+	  		const char* nrText;
+	  	} gcodeml;
+	  static gcodeml Gcode[] ={
+	  		{"	G0 & G1: Move	"},
+	  		{"	G2 & G3: Controlled Arc Move	"},
+	  		{"	G4: Dwell	"},
+	  		{"	G10: Tool Offset and Temperature Setting	"},
+	  		{"	G10: Set workplace coordinate offset or tool offset	"},
+	  		{"	G10: Retract	"},
+	  		{"	G11: Unretract	"},
+	  		{"	G17: Select XY plane for arc moves	"},
+	  		{"	G20: Set Units to Inches	"},
+	  		{"	G21: Set Units to Millimeters	"},
+	  		{"	G28: Home	"},
+	  		{"	G29: Mesh bed probe	"},
+	  		{"	G30: Single Z-Probe	"},
+	  		{"	G31: Set or Report Current Probe status	"},
+	  		{"	G32: Run bed.g macro	"},
+	  		{"	G38.2 to G38.5: Straight Probe	"},
+	  		{"	G53 Use machine coordinates	"},
+	  		{"	G54 to G59.3: Select coordinate system	"},
+	  		{"	G60: Save current position to slot	"},
+	  		{"	G90: Set to Absolute Positioning	"},
+	  		{"	G91: Set to Relative Positioning	"},
+	  		{"	G92: Set Position	"},
+	  		{"	M0: Stop or Unconditional stop	"},
+	  		{"	M1: Sleep or Conditional stop	"},
+	  		{"	M3: Spindle On, Clockwise (CNC specific)/ Laser on (Laser specific)	"},
+	  		{"	M4: Spindle On, Counterclockwise (CNC specific)	"},
+	  		{"	M5: Spindle Off (CNC specific), laser off (Laser specific)	"},
+	  		{"	M18: Disable all stepper motors	"},
+	  		{"	M20: List SD card	"},
+	  		{"	M21: Initialize SD card	"},
+	  		{"	M22: Release SD card	"},
+	  		{"	M23: Select SD file	"},
+	  		{"	M24: Start/resume SD print	"},
+	  		{"	M25: Pause SD print	"},
+	  		{"	M26: Set SD position	"},
+	  		{"	M27: Report SD print status	"},
+	  		{"	M28: Begin write to SD card	"},
+	  		{"	M29: Stop writing to SD card	"},
+	  		{"	M30: Delete a file on the SD card	"},
+	  		{"	M32: Select file and start SD print	"},
+	  		{"	M36: Return file information	"},
+	  		{"	M37: Simulation mode	"},
+	  		{"	M38: Compute SHA1 hash of target file	"},
+	  		{"	M39: Report SD card information	"},
+	  		{"	M42: Switch I/O pin	"},
+	  		{"	M80: ATX Power On	"},
+	  		{"	M81: ATX Power Off	"},
+	  		{"	M82: Set extruder to absolute mode	"},
+	  		{"	M83: Set extruder to relative mode	"},
+	  		{"	M84: Stop idle hold	"},
+	  		{"	M92: Set axis steps per unit	"},
+	  		{"	M98: Call Macro/Subprogram	"},
+	  		{"	M99: Return from Macro/Subprogram	"},
+	  		{"	M104: Set Extruder Temperature	"},
+	  		{"	M105: Get Extruder Temperature	"},
+	  		{"	M106: Fan On	"},
+	  		{"	M107: Fan Off	"},
+	  		{"	M108: Cancel Heating	"},
+	  		{"	M109: Set Extruder Temperature and Wait	"},
+	  		{"	M110: Set Current Line Number	"},
+	  		{"	M111: Set Debug Level	"},
+	  		{"	M112: Emergency Stop	"},
+	  		{"	M114: Get Current Position	"},
+	  		{"	M115: Get Firmware Version and Capabilities	"},
+	  		{"	M116: Wait	"},
+	  		{"	M117: Display Message	"},
+	  		{"	M118: Send Message to Specific Target	"},
+	  		{"	M119: Get Endstop Status	"},
+	  		{"	M120: Push	"},
+	  		{"	M121: Pop	"},
+	  		{"	M122: Diagnose	"},
+	  		{"	M135: Set PID sample interval	"},
+	  		{"	M140: Set Bed Temperature (Fast) or Configure Bed Heater	"},
+	  		{"	M141: Set Chamber Temperature (Fast) or Configure Chamber Heater	"},
+	  		{"	M143: Maximum heater temperature	"},
+	  		{"	M143 in RRF 3.01RC1 and earlier	"},
+	  		{"	M143 in RRF 3.01RC2 and later	"},
+	  		{"	M144: Bed Standby	"},
+	  		{"	M150: Set LED colours	"},
+	  		{"	M190: Wait for bed temperature to reach target temp	"},
+	  		{"	M191: Wait for chamber temperature to reach target temp	"},
+	  		{"	M200: Set filament diameter	"},
+	  		{"	M201: Set max acceleration	"},
+	  		{"	M203: Set maximum feedrate	"},
+	  		{"	M204: Set printing and travel accelerations	"},
+	  		{"	M205: Set max instantaneous speed change in mm/sec	"},
+	  		{"	M206: Offset axes	"},
+	  		{"	M207: Set retract length	"},
+	  		{"	M208: Set axis max travel	"},
+	  		{"	M220: Set speed factor override percentage	"},
+	  		{"	M221: Set extrude factor override percentage	"},
+	  		{"	M226: Synchronous Pause	"},
+	  		{"	M260: i2c Send and/or request Data	"},
+	  		{"	M261: i2c Request Data	"},
+	  		{"	M280: Set servo position	"},
+	  		{"	M290: Baby stepping	"},
+	  		{"	M291: Display message and optionally wait for response	"},
+	  		{"	M292: Acknowledge message	"},
+	  		{"	M300: Play beep sound	"},
+	  		{"	M301: Set PID parameters	"},
+	  		{"	M302: Allow cold extrudes	"},
+	  		{"	M303: Run heater tuning	"},
+	  		{"	M304: Set PID parameters - Bed	"},
+	  		{"	M305: Set temperature sensor parameters	"},
+	  		{"	M307: Set or report heating process parameters	"},
+	  		{"	M308: Set or report sensor parameters	"},
+	  		{"	M350: Set microstepping mode	"},
+	  		{"	M374: Save height map	"},
+	  		{"	M375: Load height map	"},
+	  		{"	M376: Set bed compensation taper	"},
+	  		{"	M400: Wait for current moves to finish	"},
+	  		{"	M401: Deploy z-probe	"},
+	  		{"	M402: Retract z-probe	"},
+	  		{"	M404: Filament width and nozzle diameter	"},
+	  		{"	M408: Report JSON-style response	"},
+	  		{"	M409: Query object model	"},
+	  		{"	M450: Report Printer Mode	"},
+	  		{"	M451: Select FFF Printer Mode	"},
+	  		{"	M452: Select Laser DeviceMode	"},
+	  		{"	M453: Select CNC Device Mode	"},
+	  		{"	M453 in RepRapFirmware 1.x and 2.x	"},
+	  		{"	M453 in RepRapFirmware 3.0 and 3.1.x	"},
+	  		{"	M453 in RepRapFirmware 3.2 and later	"},
+	  		{"	M470: Create Directory on SD-Card	"},
+	  		{"	M471: Rename File/Directory on SD-Card	"},
+	  		{"	M486: Object cancellation	"},
+	  		{"	M500: Store parameters	"},
+	  		{"	M501: Read stored parameters	"},
+	  		{"	M502: Revert stored parameters	"},
+	  		{"	M503: Print settings	"},
+	  		{"	M505: Set configuration file folder	"},
+	  		{"	M540: Set MAC address	"},
+	  		{"	M550: Set Name	"},
+	  		{"	M551: Set Password	"},
+	  		{"	M552: Set IP address, enable/disable network interface	"},
+	  		{"	M553: Set Netmask	"},
+	  		{"	M554: Set Gateway	"},
+	  		{"	M555: Set compatibility	"},
+	  		{"	M556: Axis skew compensation	"},
+	  		{"	M557: Set Z probe point or define probing grid	"},
+	  		{"	M558: Set Z probe type	"},
+	  		{"	M558 in RepRapFirmware 2.x and earlier	"},
+	  		{"	M558 in RepRapFirmware 3	"},
+	  		{"	M559: Upload file	"},
+	  		{"	M560: Upload file	"},
+	  		{"	M561: Set Identity Transform	"},
+	  		{"	M562: Reset temperature fault	"},
+	  		{"	M563: Define or remove a tool	"},
+	  		{"	M564: Limit axes	"},
+	  		{"	M566: Set allowable instantaneous speed change	"},
+	  		{"	M567: Set tool mix ratios	"},
+	  		{"	M568: Turn off/on tool mix ratios	"},
+	  		{"	M569: Set motor driver direction, enable polarity and step pulse timing	"},
+	  		{"	M569.1: Stepper driver closed loop control	"},
+	  		{"	M570: Configure heater fault detection	"},
+	  		{"	M571: Set output on extrude	"},
+	  		{"	M572: Set or report extruder pressure advance	"},
+	  		{"	M573: Report heater PWM	"},
+	  		{"	M574: Set endstop configuration	"},
+	  		{"	M574 - RepRapFirmware 2.x and earlier	"},
+	  		{"	M574 - RepRapFirmware 3	"},
+	  		{"	M575: Set serial comms parameters	"},
+	  		{"	M577: Wait until endstop is triggered	"},
+	  		{"	M577 - RepRapFirmware 2.x and earlier	"},
+	  		{"	M577 - RepRapFirmware 3.0 up to 3.01RC1	"},
+	  		{"	M577 - RepRapFirmware 3.01RC2 and later	"},
+	  		{"	M578: Fire inkjet bits	"},
+	  		{"	M579: Scale Cartesian axes	"},
+	  		{"	M580: Select Roland	"},
+	  		{"	M581: Configure external trigger	"},
+	  		{"	M581 - RepRapFirmware 2.x and earlier	"},
+	  		{"	M581 - RepRapFirmware 3.0 to 3.01RC1 (but not 3.01RC2 and later)	"},
+	  		{"	M581 - RepRapFirmware 3.01RC2 and later	"},
+	  		{"	M582: Check external trigger	"},
+	  		{"	M584: Set drive mapping	"},
+	  		{"	M585: Probe Tool	"},
+	  		{"	M586: Configure network protocols	"},
+	  		{"	M587: Add WiFi host network to remembered list, or list remembered networks	"},
+	  		{"	M588: Forget WiFi host network	"},
+	  		{"	M589: Configure access point parameters	"},
+	  		{"	M591: Configure filament sensing	"},
+	  		{"	M591 - RepRapFirmware 3	"},
+	  		{"	M591 - RepRapFirmware 1.21 to 2.x	"},
+	  		{"	M591 - RepRapFirmware 1.20 and earlier	"},
+	  		{"	M592: Configure nonlinear extrusion	"},
+	  		{"	M593: Configure Dynamic Acceleration Adjustment	"},
+	  		{"	M594: Enter/Leave Height Following mode	"},
+	  		{"	M600: Filament change pause	"},
+	  		{"	M650: Set peel move parameters	"},
+	  		{"	M651: Execute peel move	"},
+	  		{"	M665: Set delta configuration	"},
+	  		{"	M666: Set delta endstop adjustment	"},
+	  		{"	M667: Select CoreXY or related mode	"},
+	  		{"	M669: Set kinematics type and kinematics parameters	"},
+	  		{"	M670: Set IO port bit mapping	"},
+	  		{"	M671: Define positions of Z leadscrews or bed levelling screws	"},
+	  		{"	M672: Program Z probe	"},
+	  		{"	M673: Align plane on rotary axis	"},
+	  		{"	M674: Set Z to center point	"},
+	  		{"	M675: Find center of cavity	"},
+	  		{"	M701: Load filament	"},
+	  		{"	M702: Unload filament	"},
+	  		{"	M703: Configure filament	"},
+	  		{"	M750: Enable 3D scanner extension	"},
+	  		{"	M751: Register 3D scanner extension over USB	"},
+	  		{"	M752: Start 3D scan	"},
+	  		{"	M753: Cancel current 3D scanner action	"},
+	  		{"	M754: Calibrate 3D scanner	"},
+	  		{"	M755: Set alignment mode for 3D scanner	"},
+	  		{"	M756: Shutdown 3D scanner	"},
+	  		{"	M851: Set Z-Probe Offset (Marlin Compatibility)	"},
+	  		{"	M905: Set local date and time	"},
+	  		{"	M906: Set motor currents	"},
+	  		{"	M911: Configure auto save on loss of power	"},
+	  		{"	M912: Set electronics temperature monitor adjustment	"},
+	  		{"	M913: Set motor percentage of normal current	"},
+	  		{"	M914: Set/Get Expansion Voltage Level Translator	"},
+	  		{"	M915: Configure motor stall detection	"},
+	  		{"	M916: Resume print after power failure	"},
+	  		{"	M917: Set motor standstill current reduction	"},
+	  		{"	M918: Configure direct-connect display	"},
+	  		{"	M929: Start/stop event logging to SD card	"},
+	  		{"	M950: Create heater, fan or GPIO/servo pin	"},
+	  		{"	M951: Set height following mode parameters	"},
+	  		{"	M952: Set CAN-FD expansion board address and/or normal data rate	"},
+	  		{"	M953: Set CAN-FD bus fast data rate	"},
+	  		{"	M997: Perform in-application firmware update	"},
+	  		{"	M998: Request resend of line	"},
+	  		{"	M999: Restart	"},
+	  		{"	T: Select Tool	"},
+
+	  };
+
+
+#endif /* JNI_LOGIC_ID_H_ */
