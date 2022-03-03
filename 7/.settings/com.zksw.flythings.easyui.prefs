@@ -1,0 +1,5 @@
+easyui.cfg.debug={"baud"\:"57600","defBrightness"\:-1,"font"\:"/mnt/extsd/ui/fzcircle.ttf","languageCode"\:"zh_CN","languagePath"\:"/mnt/extsd/tr/","resPath"\:"/mnt/extsd/ui/","rotateScreen"\:0,"rotateTouch"\:0,"screensaverTimeOut"\:-1,"startupLibPath"\:"/mnt/extsd/lib/libzkgui.so","startupTouchCalib"\:false,"touchDev"\:"/dev/input/event1","uart"\:"ttyS0","zkdebug"\:false}
+easyui.cfg.release={"baud"\:"57600","defBrightness"\:-1,"font"\:"/res/ui/fzcircle.ttf","languageCode"\:"zh_CN","languagePath"\:"/res/tr/","resPath"\:"/res/ui/","rotateScreen"\:0,"rotateTouch"\:0,"screensaverTimeOut"\:-1,"startupLibPath"\:"/res/lib/libzkgui.so","startupTouchCalib"\:false,"touchDev"\:"/dev/input/event1","uart"\:"ttyS0","zkdebug"\:false}
+eclipse.preferences.version=1
+platform={"name"\:"Z6S","cprojectTemplateDir"\:"bundle/cproject/z6s","internalCode"\:"z6s"}
+resolution=480x272

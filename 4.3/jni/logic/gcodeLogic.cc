@@ -16,7 +16,7 @@
 #include "manager/ConfigManager.h"
 #include "os/MountMonitor.h"
 #include <algorithm>
-#include "ID.h"
+#include "gcodes.h"
 #include "json/json.h"
 
 void Hardware_serial_transmission(const std::string& data) ;
@@ -36,14 +36,10 @@ int X_Axis_maximum = 0,Y_Axis_maximum = 0 ;//初始化XY最大值，用于移动
 
 int whT=0;//维护界面左右转换T
 
-// 设备 id 共8个字节
-	  unsigned char devID[8];
-	  // 成功返回 true，失败返回 false
-	  bool ret = SECURITYMANAGER->getDevID(devID);
+
 	  gcodeml c;
 	  extern  gcodeml c;
-//	  extern char key2[];
-	  char id[100];
+
 
 
 //	  // 波形数据存储区
@@ -691,7 +687,7 @@ void IPaddress(string strLine){
  // 处理没有ok的字符串
  void processPrinterCodeLine(string strLine) {
 
-	 //LOGD("%s",strLine.c_str());
+	 //LOGD("串口反馈：%s",strLine.c_str());
 	 //打印结束设置进度条
 	 if(strstr(strLine.c_str(),"Finished printing")){
 		mSeekbar4Ptr->setProgress(100);
@@ -716,7 +712,7 @@ void IPaddress(string strLine){
 			    char* stra = strstr(strLinea.c_str(),"fraction_printed")+18;// 前置去除空白
 			    char* tokena = strtok(stra, ",");
 					string hda = tokena;
-					Command_Feedback.push_back(hda) ;
+
 					//获取打印速度
 					float dyjd=atof(hda.c_str())*100;
 					mSeekbar4Ptr->setProgress(dyjd);
@@ -820,19 +816,21 @@ void IPaddress(string strLine){
 
 	   if (Numerical.isMember("resp")) {
 
-           if(gindex >= 200)
-        	 Command_Feedback.clear();//计算总共记录了多少条反馈的命令，200条清理一次
+           if(Command_Feedback.size() >= 200)
+        	  Command_Feedback.clear();//计算总共记录了多少条反馈的命令，200条清理一次
 
-           LOGD("坐标：%s",Numerical["resp"].asString().c_str());
+          // LOGD("坐标：%s",Numerical["resp"].asString().c_str());
+           if( strlen (Numerical["resp"].asString().c_str()) > 1 )
+        {
 	       Command_Feedback.push_back(Numerical["resp"].asString().c_str()) ; //获得值储存
-	       gindex++;//计算总共记录了多少条反馈的命令，200条清理一次。
-//				//
+	      // gindex++;//计算总共记录了多少条反馈的命令，200条清理一次。
+			//
 		   mListView2Ptr->refreshListView();
-		   mListView2Ptr->setSelection(gindex-2);
+		   mListView2Ptr->setSelection(Command_Feedback.size()-2);
 	        if(strstr(Numerical["resp"].asString().c_str(),"Speed factor")){
-				mButton83Ptr->setText(strstr(Numerical["resp"].asString().c_str(),"Speed factor")+13);
+			 mButton83Ptr->setText(strstr(Numerical["resp"].asString().c_str(),"Speed factor")+13);
 			}
-
+          }
 
 	    }
 
@@ -880,7 +878,7 @@ void IPaddress(string strLine){
 
 			 if(can_in > 1){
 				 can_in--; }
-			 //Hardware_serial_transmission("M408 S0\r\n");
+			 Hardware_serial_transmission("M408 S0\r\n");
 
 
 		 //屏幕休眠
@@ -1070,11 +1068,7 @@ if(xztime<0){//卸载按钮动画展示
      //LOGD(" ButtonClick btnPause !!!\n");
 
  	if (!pButton->isSelected()) {//如果暂停
-// 	std::string printpause = StoragePreferences::getString("printpause", "null");//获得暂停坐标
 
-// 	if(strcmp(printpause.c_str(),"null")!=0){
-// 	Hardware_serial_transmission(printpause.c_str(), strlen(printpause.c_str()));
- //	Hardware_serial_transmission("\r\n", strlen("\r\n"));}
     canSend = false;
     can_in = 0;
  	Hardware_serial_transmission("M226\r\n");
@@ -1098,8 +1092,12 @@ if(xztime<0){//卸载按钮动画展示
      //LOGD(" ButtonClick btnPrintOK !!!\n");
 	 if(currmode == 0){
 		 char buf[128];
-	     printinit();//打印结束初
-	     snprintf(buf,sizeof(buf),"M32%s/%s\r\n",print_file_path.c_str()+3,File_Gcodes[xzgcodenum].c_str());
+	     printinit();//打印初始化
+	     if( strlen(print_file_path.c_str()) > 17 )
+	        snprintf(buf,sizeof(buf),"M32 %s/%s\r\n",print_file_path.c_str()+18,File_Gcodes[xzgcodenum].c_str());
+	     else
+	    	 snprintf(buf,sizeof(buf),"M32 %s\r\n",File_Gcodes[xzgcodenum].c_str());
+
 	     // LOGD("打印文件路径：%s",buf);
 	     Hardware_serial_transmission(buf);
 
@@ -1318,7 +1316,7 @@ if(xztime<0){//卸载按钮动画展示
  	 					}
  	 					else
  				Hardware_serial_transmission(axismoves);
- 				Hardware_serial_transmission("G90 \r\n");
+ 				Hardware_serial_transmission("G90\r\n");
  	    return false;
  }
 
@@ -1370,15 +1368,15 @@ if(xztime<0){//卸载按钮动画展示
 
  static bool onButtonClick_Button26(ZKButton *pButton) {
      //LOGD(" ButtonClick Button26 !!!\n");
- 	const char* G28X="G28 X\r\n";
- 	Hardware_serial_transmission(G28X);
+
+ 	Hardware_serial_transmission("G28 X\r\n");
      return false;
  }
 
  static bool onButtonClick_Button27(ZKButton *pButton) {
      //LOGD(" ButtonClick Button27 !!!\n");
-	 const char* G28Y="G28 Y\r\n";
-	 Hardware_serial_transmission(G28Y);
+
+	 Hardware_serial_transmission("G28 Y\r\n");
      return false;
  }
 
@@ -1678,7 +1676,6 @@ static bool onButtonClick_Button72(ZKButton *pButton) {
 //	mLVFolderPtr->setSelection(1);//跳转到第一行
 	    setxs(3);//切换背景
 
-	//	Hardware_serial_transmission("G90\r\n", strlen("G90\r\n"));
         if(mwinPrintPtr->isVisible()){
         	mfishPtr->setVisible(false);
         	mwinPrintPtr->setVisible(true);
@@ -1711,7 +1708,7 @@ static bool onButtonClick_Button73(ZKButton *pButton) {
 static bool onButtonClick_Button74(ZKButton *pButton) {
 	//mwifiPtr->setVisible(true);
     setxs(5);
-    //Hardware_serial_transmission("M503\r\n", strlen("M503\r\n"));
+
     std::string wifiname = StoragePreferences::getString("wifiname", "");
     std::string wifipassword = StoragePreferences::getString("wifipassword", "");
     mEditText1Ptr ->setText(wifiname.c_str());
@@ -2357,9 +2354,12 @@ static bool onButtonClick_Button126(ZKButton *pButton) {
 	         char buf[150];
 	        		 sprintf(buf,"Send：%s\r\n",sContentStr.c_str());
 	        		 Command_Feedback.push_back(buf) ;
-	        		 gindex++;
+	        		// gindex++;
 	        		 mListView2Ptr->refreshListView();
-	        		 mListView2Ptr->setSelection(gindex-2);break;
+	        		 mListView2Ptr->setSelection(Command_Feedback.size()-2);
+	        		// LOGD("键盘内容：%s",sContentStr.c_str());
+	        		 break;
+
 	}
 	std::string xcdf = StoragePreferences::getString("Xcd", "");//X
 	std::string ycdf = StoragePreferences::getString("Ycd", "");//X长度
@@ -2399,7 +2399,6 @@ case 18:sprintf(buf,"HIGH speed：%s",gsf.c_str());mButton118Ptr->setText(buf); 
 	}
 
 	//backok++;
-	//Hardware_serial_transmission("\r\n", strlen("\r\n"));
 
  	sContentStr.clear();
 	mTextView46Ptr->setText("");
@@ -2688,7 +2687,7 @@ static bool onButtonClick_Button168(ZKButton *pButton) {
 
 static int getListItemCount_ListView2(const ZKListView *pListView) {
     //LOGD("getListItemCount_ListView2 !\n");
-    return gindex;
+    return Command_Feedback.size();
 }
 
 static void obtainListItemData_ListView2(ZKListView *pListView,ZKListView::ZKListItem *pListItem, int index) {
@@ -2903,11 +2902,9 @@ static void onListItemClick_ListView5(ZKListView *pListView, int index, int id) 
 }
 static bool onButtonClick_Button9(ZKButton *pButton) {
    // LOGD(" ButtonClick Button9 !!!\n");
-	currmode = 0;
+	 currmode = 0;
 	 print_file_path = "M20 S2 P0:/gcodes";
 	 Hardware_serial_transmission("M20 S2 P0:/gcodes\r\n");
-	//0 Thread::sleep(100);
-	 //Hardware_serial_transmission("M408 S0 R190\n", strlen("M408 S0 R190\n"));
 	 mboardsdPtr->setVisible(true);
 	 mfishPtr->setVisible(false);
     return false;
@@ -2971,13 +2968,13 @@ static void onListItemClick_boardsd(ZKListView *pListView, int index, int id) {
       sprintf(buf,"%s", File_Gcodes[xzgcodenum].c_str());
 
 		//LOGD("%c",buf[0]);
-		if(buf[0] != '*'){
+		if(buf[0] != '*'){//非文件夹
 
 			mwinQueryPrintPtr->setVisible(true);
 
 		}
 
-		else{
+		else{//文件夹
 			  print_file_path += "/";
 			  print_file_path += buf+1;//去除*
 			  Hardware_serial_transmission(print_file_path.c_str());
@@ -3355,7 +3352,6 @@ static bool onButtonClick_Button40(ZKButton *pButton) {
 }
 static bool onButtonClick_Button42(ZKButton *pButton) {
 //	std::string Leveling2 = StoragePreferences::getString("Leveling2", "");
-//	Hardware_serial_transmission(Leveling2.c_str(), strlen(Leveling2.c_str()));
 
 	std::string Leveling_high = StoragePreferences::getString("Leveling_high", "NULL");
 	if(strcmp(Leveling_high.c_str(),"NULL")!=0){
@@ -3390,7 +3386,6 @@ static bool onButtonClick_Button42(ZKButton *pButton) {
 
 static bool onButtonClick_Button43(ZKButton *pButton) {
 //	std::string Leveling3 = StoragePreferences::getString("Leveling3", "");
-//	Hardware_serial_transmission(Leveling3.c_str(), strlen(Leveling3.c_str()));
 
 	std::string Leveling_high = StoragePreferences::getString("Leveling_high", "NULL");
 	if(strcmp(Leveling_high.c_str(),"NULL")!=0){
@@ -3531,6 +3526,7 @@ static bool onButtonClick_Move_XY(ZKButton *pButton) {
 	 std::string xyspeedf = StoragePreferences::getString("XYspeed", "");//XY速度
 
     LayoutPosition Move_XY_button_pos = pButton->getPosition();
+    LayoutPosition coordinate_pos = mcoordinatePtr->getPosition();
 
     //获取分辨率
 	float Move_Resolution_X = X_Axis_maximum / (float)Move_XY_button_pos.mWidth;
@@ -3555,7 +3551,7 @@ static bool onButtonClick_Move_XY(ZKButton *pButton) {
  			else
 			Hardware_serial_transmission(" F2500\r\n");
 
-    LayoutPosition coordinate(Motion_Event_X-8, Motion_Event_Y-16, 16, 16);
+    LayoutPosition coordinate(Motion_Event_X-coordinate_pos.mWidth/2, Motion_Event_Y-coordinate_pos.mHeight, coordinate_pos.mWidth, coordinate_pos.mHeight);
     mcoordinatePtr->setPosition(coordinate);
 
 
