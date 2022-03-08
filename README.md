@@ -35,5 +35,8 @@ M575 P1 S0 B57600
 - Modify the config.g file on the screen. 
 - Configure the machine firmware on the screen without opening the web page configuration
 
+## Compiling/Editing instructions
+Please see [here](https://teamgloomy.github.io/fly_firmware_compile.html) for more detailed information regarding compiling and editing the firmware now it is open source.
+
 ## Support
 If you have any usage problems, please join https://discord.gg/hccjyvv Come to consult me
