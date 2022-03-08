@@ -4,9 +4,9 @@
 #include "gcodeActivity.h"
 
 /*TAG:GlobalVariable全局变量*/
+static ZKButton* mY_ValuePtr;
+static ZKButton* mX_ValuePtr;
 static ZKTextView* mTextview52Ptr;
-static ZKTextView* mY_ValuePtr;
-static ZKTextView* mX_ValuePtr;
 static ZKSeekBar* mX_axis_maximumPtr;
 static ZKSeekBar* mY_axis_maximumPtr;
 static ZKTextView* mcoordinatePtr;
@@ -331,6 +331,8 @@ typedef struct {
 
 /*TAG:ButtonCallbackTab按键映射表*/
 static S_ButtonCallback sButtonCallbackTab[] = {
+    ID_GCODE_Y_Value, onButtonClick_Y_Value,
+    ID_GCODE_X_Value, onButtonClick_X_Value,
     ID_GCODE_Move_XY, onButtonClick_Move_XY,
     ID_GCODE_Message_Report_Close, onButtonClick_Message_Report_Close,
     ID_GCODE_Button50, onButtonClick_Button50,
@@ -594,6 +596,8 @@ const char* gcodeActivity::getAppName() const{
 //TAG:onCreate
 void gcodeActivity::onCreate() {
 	Activity::onCreate();
+    mY_ValuePtr = (ZKButton*)findControlByID(ID_GCODE_Y_Value);
+    mX_ValuePtr = (ZKButton*)findControlByID(ID_GCODE_X_Value);
     mTextview52Ptr = (ZKTextView*)findControlByID(ID_GCODE_Textview52);
     mY_ValuePtr = (ZKTextView*)findControlByID(ID_GCODE_Y_Value);
     mX_ValuePtr = (ZKTextView*)findControlByID(ID_GCODE_X_Value);

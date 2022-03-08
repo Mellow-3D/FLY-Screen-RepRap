@@ -18,6 +18,8 @@
 #include <algorithm>
 #include "gcodes.h"
 #include "json/json.h"
+#include "qoi.h"
+
 
 void Hardware_serial_transmission(const std::string& data) ;
 
@@ -114,6 +116,19 @@ static more_time moretime[] = {
 
 };
 
+
+
+
+typedef struct {
+	string fileName;
+	string data;
+	int next;
+	int width;
+	int height;
+	int offset;
+
+} Thumbnails;
+static Thumbnails Thumbnails_set;
 //用于设置界面显示选项
 typedef struct {
 	const char* mainText;
@@ -401,6 +416,7 @@ string print_file_path = "M20 S2 P0:/gcodes";
 
   void printinit(){
 
+	 Hardware_serial_transmission("M36\r\n");
 	 atimes = 0,timef = 0,timeh = 0,timet = 0,dytime=0,sytime=0;
      canSend= true;
      mfishPtr->setVisible(false);
@@ -584,8 +600,8 @@ if(buf[9]>0)
 	 Y_Axis_maximum = StoragePreferences::getInt("Y_axis_maximum", 300);
 	 mX_ValuePtr->setText(X_Axis_maximum);
 	 mY_ValuePtr->setText(Y_Axis_maximum);
-
-
+	 mX_axis_maximumPtr->setProgress(X_Axis_maximum);
+	 mY_axis_maximumPtr->setProgress(Y_Axis_maximum);
 
 
 
@@ -687,7 +703,8 @@ void IPaddress(string strLine){
  // 处理没有ok的字符串
  void processPrinterCodeLine(string strLine) {
 
-	 //LOGD("串口反馈：%s",strLine.c_str());
+	//LOGD("串口反馈：%s",strLine.c_str());
+
 	 //打印结束设置进度条
 	 if(strstr(strLine.c_str(),"Finished printing")){
 		mSeekbar4Ptr->setProgress(100);
@@ -732,9 +749,7 @@ void IPaddress(string strLine){
 	 if(strstr(strLine.c_str(),"IP address")){//
 			 IPaddress(strLine);}
 
-
-
-	 if(strstr(strLine.c_str(),"status") || strstr(strLine.c_str(),"files") || strstr(strLine.c_str(),"resp")){
+	 if(strstr(strLine.c_str(),"status") || strstr(strLine.c_str(),"files") || strstr(strLine.c_str(),"resp") || strstr(strLine.c_str(),"thumbnail")){
  char buf[256];
 	 Json::Reader reader;
 	 Json::Value Numerical;
@@ -743,7 +758,6 @@ void IPaddress(string strLine){
 	 std::string json_string = strLine;
 	 if (reader.parse(json_string, Numerical, false)) {
 	   //LOGD("解析成功");
-
 
 
 	   //解析sd卡文件
@@ -755,7 +769,7 @@ void IPaddress(string strLine){
 	        for (Json::ArrayIndex i = 0; i < obj.size(); ++i) {
 	        	File_Gcodes.push_back( obj[i].asString().c_str()); //获得值储存
 	        	gcodenum ++;
-	        	  LOGD("文件：%s",obj[i].asString().c_str());
+	        	//  LOGD("文件：%s",obj[i].asString().c_str());
 	        }
 				//gcodenum=gcodenum+1;
                 mboardsdPtr->refreshListView();
@@ -791,15 +805,100 @@ void IPaddress(string strLine){
 	   if (Numerical.isMember("pos")) {
 	      Json::Value obj = Numerical["pos"];
 	      Machine_Pos.clear();
-	      if (obj.isArray()) {
 
-	        for (Json::ArrayIndex i = 0; i < obj.size(); ++i) {
-	        	snprintf(buf,sizeof(buf),"%0.2f",atof(obj[i].asString().c_str()));
-	          //  LOGD("坐标：%s",buf);
-	        	Machine_Pos.push_back(buf); //获得值储存
-	        }
+	      if (obj.isArray()) {
+	          for (Json::ArrayIndex i = 0; i < obj.size(); ++i) {
+	            	snprintf(buf,sizeof(buf),"%0.2f",atof(obj[i].asString().c_str()));
+	        	   Machine_Pos.push_back(buf); //获得值储存
+	          }
 	      }
+
 	    }
+
+
+	   //当前打印文件名字 //Current print file name
+	   if (Numerical.isMember("fileName")) {
+		   Thumbnails_set.fileName = Numerical["fileName"].asString();
+	   }
+
+	   if (Numerical.isMember("thumbnail")) {
+
+	     Json::Value sub = Numerical["thumbnail"];
+	     if (sub.isObject()) {
+
+	  	   if (sub.isMember("data")) {//储存缩略图数据   //save thumbnail data
+	  		   Thumbnails_set.data += sub["data"].asString();
+
+	  	   }
+
+		   if (sub.isMember("next")) {//获取下一次发送的偏移// Get the offset of the next send
+			   Thumbnails_set.next += sub["next"].asInt();
+
+
+			   if(sub["next"].asInt() != 0 ){//偏移不为0时，缩略图还没有接收完整，继续发送命令，以获得完整的数据。//When the offset is not 0, the thumbnail has not been received completely, continue to send commands to obtain complete data.
+	               sprintf(buf,"M36.1 P\"%s\" S%d\r\n",Thumbnails_set.fileName.c_str()+2,sub["next"].asInt());
+	               Hardware_serial_transmission(buf);
+				   QOIUtils::set_qoi_image(mTextView9Ptr, Thumbnails_set.data.c_str());//解析当前的缩略图数据//Parse the current thumbnail data
+
+			   }
+			   else{ //已经接收完所有的QOI数据
+				     //After receiving all QOI data
+				     QOIUtils::set_qoi_image(mTextView9Ptr, Thumbnails_set.data.c_str());//解析缩略图数据//Parse Thumbnail Data
+				     Thumbnails_set.data.clear();                                        //清理缩略图数据//Clean up thumbnail data
+				     Thumbnails_set.fileName.clear();                                    //清理文件名        //clean filename
+			       }
+
+		   }
+
+	     }
+
+
+	   }
+
+
+
+
+	   //解析缩略图的大小以及首次偏移量，我们只解析文件中最后一个缩略图
+	   //Parse the size of the thumbnail and the first offset, we only parse the last thumbnail in the file
+	   if (Numerical.isMember("thumbnails")) {
+
+
+	      Json::Value obj = Numerical["thumbnails"];
+	      if (obj.isArray()) {
+	          for (Json::ArrayIndex i = 0; i < obj.size(); ++i)
+	          {
+	        	  Json::Value& root = obj[i];
+
+		        	  if (root.isMember("width")){//获得缩略图宽度 //get thumbnail width
+		        		  Thumbnails_set.width = root["width"].asInt();
+		        	  }
+		        	  if (root.isMember("height")){//获得缩略图高度 //get thumbnail height
+		        		  Thumbnails_set.height = root["height"].asInt();
+		        	  }
+		        	  if (root.isMember("offset")){//获得缩略图首次偏移量 //get thumbnail first offset
+		        		  Thumbnails_set.offset = root["offset"].asInt();
+		        	  }
+	            }
+
+			  LayoutPosition Thumbnails_get_pos = mTextView9Ptr->getPosition();               //获取要设置预览控件的坐标 //Get the coordinates of the preview control to set
+			  int middle_point_x = Thumbnails_get_pos.mLeft  +  Thumbnails_get_pos.mWidth/2;  //计算要设置预览控件的中心点X坐标 //Calculate the X coordinate of the center point of the preview control to be set
+			  int middle_point_y = Thumbnails_get_pos.mTop   +  Thumbnails_get_pos.mHeight/2; //计算要设置预览控件的中心点Y坐标 //Calculate the Y coordinate of the center point of the preview control to be set
+
+			  int point_x_Thumbnails = middle_point_x - Thumbnails_set.width/2;     //根据缩略图宽度计算要设置预览控件的X坐标 //Calculate the X coordinate to set the preview control based on the thumbnail width
+			  int point_y_Thumbnails = middle_point_y - Thumbnails_set.height/2;    //根据缩略图宽度计算要设置预览控件的Y坐标 //Calculate the y coordinate to set the preview control based on the thumbnail width
+			  //准备设置预览图位置以及大小
+			  //Prepare to set the preview position and size
+			  LayoutPosition Thumbnails_set_pos( point_x_Thumbnails , point_y_Thumbnails , Thumbnails_set.width, Thumbnails_set.height);
+			   mTextView9Ptr->setPosition(Thumbnails_set_pos);//设置预览图位置以及大小 //Set the preview position and size
+			   //合成M36.1命令以获取预览图数据
+			   //Synthesize M36.1 commands to get preview image data
+	          sprintf(buf,"M36.1 P\"%s\" S%d\r\n",Thumbnails_set.fileName.c_str()+2,Thumbnails_set.offset);
+	          Hardware_serial_transmission(buf);//发送M36.1命令以获取预览图数据 //Send M36.1 command to get preview image data
+
+	      }
+
+	    }
+
 
 	   //解析风扇速度
 //	   if (Numerical.isMember("fanPercent")) {
@@ -821,15 +920,15 @@ void IPaddress(string strLine){
 
           // LOGD("坐标：%s",Numerical["resp"].asString().c_str());
            if( strlen (Numerical["resp"].asString().c_str()) > 1 )
-        {
-	       Command_Feedback.push_back(Numerical["resp"].asString().c_str()) ; //获得值储存
-	      // gindex++;//计算总共记录了多少条反馈的命令，200条清理一次。
-			//
-		   mListView2Ptr->refreshListView();
-		   mListView2Ptr->setSelection(Command_Feedback.size()-2);
-	        if(strstr(Numerical["resp"].asString().c_str(),"Speed factor")){
-			 mButton83Ptr->setText(strstr(Numerical["resp"].asString().c_str(),"Speed factor")+13);
-			}
+          {
+	         Command_Feedback.push_back(Numerical["resp"].asString().c_str()) ; //获得值储存
+	         // gindex++;//计算总共记录了多少条反馈的命令，200条清理一次。
+			 //
+		     mListView2Ptr->refreshListView();
+		     mListView2Ptr->setSelection(Command_Feedback.size()-2);
+	          if(strstr(Numerical["resp"].asString().c_str(),"Speed factor")){
+			     mButton83Ptr->setText(strstr(Numerical["resp"].asString().c_str(),"Speed factor")+13);
+			   }
           }
 
 	    }
@@ -877,7 +976,9 @@ void IPaddress(string strLine){
 
 
 			 if(can_in > 1){
-				 can_in--; }
+				 can_in--;
+			 }
+
 			 Hardware_serial_transmission("M408 S0\r\n");
 
 
@@ -1923,6 +2024,18 @@ static bool onButtonClick_Button95(ZKButton *pButton) {
 		         mButton3Ptr->setText(temprcwd);
 		         Hardware_serial_transmission(sContentStr.c_str());break;
 
+	case 50:      StoragePreferences::putInt("X_axis_maximum", atoi(sContentStr.c_str()));
+		          mX_ValuePtr->setText(atoi(sContentStr.c_str()));
+		      	  X_Axis_maximum = atoi(sContentStr.c_str());
+		      	  mX_axis_maximumPtr->setProgress(X_Axis_maximum);
+
+		          break;
+	case 51:      StoragePreferences::putInt("Y_axis_maximum", atoi(sContentStr.c_str()));
+		          mY_ValuePtr->setText(atoi(sContentStr.c_str()));
+		      	  Y_Axis_maximum = atoi(sContentStr.c_str());
+		          mY_axis_maximumPtr->setProgress(Y_Axis_maximum);
+
+		          break;
 
 	}
 	//backok++;
@@ -1936,12 +2049,6 @@ static bool onButtonClick_Button96(ZKButton *pButton) {
   //  LOGD(" ButtonClick Button96 !!!\n");
 	delOneChar();
     return false;
-}
-static void onProgressChanged_SeekBar4(ZKSeekBar *pSeekBar, int progress) {
-    //LOGD(" ProgressChanged SeekBar4 %d !!!\n", progress);
-
-
-
 }
 
 
@@ -2332,12 +2439,9 @@ static bool onButtonClick_Button126(ZKButton *pButton) {
 
 
 
-
-
-
-
 	case 40:Hardware_serial_transmission(sContentStr);
 	        Hardware_serial_transmission("\r\n");break;
+
 
 
 //脉冲速度pid
@@ -2402,8 +2506,6 @@ case 18:sprintf(buf,"HIGH speed：%s",gsf.c_str());mButton118Ptr->setText(buf); 
 
  	sContentStr.clear();
 	mTextView46Ptr->setText("");
-    return false;
-
 
 	return false;
 }
@@ -3568,4 +3670,19 @@ static void onProgressChanged_Y_axis_maximum(ZKSeekBar *pSeekBar, int progress) 
 	StoragePreferences::putInt("Y_axis_maximum", progress);
 	Y_Axis_maximum = progress;
 	mY_ValuePtr->setText(progress);
+}
+
+static bool onButtonClick_X_Value(ZKButton *pButton) {
+	curprintcs = 50 ;
+	 mAJPtr->setVisible(true);
+    return false;
+}
+
+static bool onButtonClick_Y_Value(ZKButton *pButton) {
+	curprintcs = 51 ;
+	 mAJPtr->setVisible(true);
+    return false;
+}
+static void onProgressChanged_SeekBar4(ZKSeekBar *pSeekBar, int progress) {
+    //LOGD(" ProgressChanged SeekBar4 %d !!!\n", progress);
 }
