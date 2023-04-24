@@ -1172,7 +1172,7 @@ if(xztime<0){//卸载按钮动画展示
 
     canSend = false;
     can_in = 0;
- 	Hardware_serial_transmission("M226\r\n");
+ 	Hardware_serial_transmission("M25\r\n");
  	mbtnPausePtr->setTextTr("continue");//显示
  	}
  	else{
@@ -1288,7 +1288,7 @@ if(xztime<0){//卸载按钮动画展示
  }
  static bool onButtonClick_btnBack(ZKButton *pButton) {//********************************************停止打印*******************************************************************************
      //LOGD(" ButtonClick btnBack !!!\n");
-	 Hardware_serial_transmission("M226\r\n");
+	 Hardware_serial_transmission("M25\r\n");
 	 Hardware_serial_transmission("M0\r\n");
 //
 // 	if(statkg != 0)//如果没打印完

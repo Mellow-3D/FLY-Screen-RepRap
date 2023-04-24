@@ -1128,55 +1128,55 @@ if(xztime<0){//卸载按钮动画展示
 
  	 int timeb;
       switch (ev.mActionStatus) {
-  		case MotionEvent::E_ACTION_DOWN://触摸按下
+  		case MotionEvent::E_ACTION_DOWN://触摸按下 touch press
   			//LOGD("时刻 = %ld 坐标  x = %d, y = %d", ev.mEventTime, ev.mX, ev.mY);
   			Motion_Event_X = ev.mX;
   			Motion_Event_Y = ev.mY;
 
 
-  			//双击归位
+  			//双击归位 double click
   			  if(StoragePreferences::getBool("SJ", false)){
   			  timeb =getCurrentTime();
   			 		 	if((timeb - timea < StoragePreferences::getInt("SJtime", 160))&&canSend==false)
   			 		Hardware_serial_transmission("G28\r\n");
   			 		 	timea = timeb;}
 
-  			  if(StoragePreferences::getBool("pmcs", false)){//读取是否开启了休眠
+  			  if(StoragePreferences::getBool("pmcs", false)){//读取是否开启了休眠 Read whether hibernation is enabled
   							 cstimea = 0;}
 
 
   			break;
-  		case MotionEvent::E_ACTION_MOVE://触摸滑动
+  		case MotionEvent::E_ACTION_MOVE://触摸滑动 touch slide
   			break;
   		case MotionEvent::E_ACTION_UP:
 
-  			//定时休眠开启屏幕
+  			//定时休眠开启屏幕 Scheduled sleep to turn on the screen
 
-				  if(!BRIGHTNESSHELPER->isScreenOn()){//屏幕背光关闭中
+				  if(!BRIGHTNESSHELPER->isScreenOn()){//屏幕背光关闭中 screen backlight off
 				   BRIGHTNESSHELPER->screenOn();
-				   mAnti_touchPtr->setVisible(false); //抬起后关闭防触摸界面
+				   mAnti_touchPtr->setVisible(false); //抬起后关闭防触摸界面 Turn off touch-resistant interface when lifted
 				   cstimea = 0;
 			  }
 
-			  //触摸抬起
+			  //触摸抬起 touch up
   			break;
   		default:
   			break;
   	}
   	return false;
   }
- static bool onButtonClick_btnPause(ZKButton *pButton) {//暂停打印
+ static bool onButtonClick_btnPause(ZKButton *pButton) {//暂停打印 pause printing
      //LOGD(" ButtonClick btnPause !!!\n");
 
- 	if (!pButton->isSelected()) {//如果暂停
+ 	if (!pButton->isSelected()) {//如果暂停 if pause
 
     canSend = false;
     can_in = 0;
- 	Hardware_serial_transmission("M226\r\n");
- 	mbtnPausePtr->setTextTr("continue");//显示
+ 	Hardware_serial_transmission("M25\r\n");
+ 	mbtnPausePtr->setTextTr("continue");//显示 show
  	}
  	else{
- 	mbtnPausePtr->setTextTr("Pause");//显示
+ 	mbtnPausePtr->setTextTr("Pause");//显示 show
  	Hardware_serial_transmission("M24\r\n");
  	canSend = true;
  	 can_in = 1;
@@ -1286,13 +1286,13 @@ if(xztime<0){//卸载按钮动画展示
  		break;
  	}
  }
- static bool onButtonClick_btnBack(ZKButton *pButton) {//********************************************停止打印*******************************************************************************
+ static bool onButtonClick_btnBack(ZKButton *pButton) {//********************************************停止打印******************************************************************************* stop printing
      //LOGD(" ButtonClick btnBack !!!\n");
-	 Hardware_serial_transmission("M226\r\n");
+	 Hardware_serial_transmission("M25\r\n");
 	 Hardware_serial_transmission("M0\r\n");
 //
-// 	if(statkg != 0)//如果没打印完
-// 	printcel=1;//取消打印标志
+// 	if(statkg != 0)//如果没打印完 if not printed
+// 	printcel=1;//取消打印标志 cancel print sign
 // 	canSend = false;
 // 	gcode.clear();
  	mwinPrintPtr->hideWnd();
