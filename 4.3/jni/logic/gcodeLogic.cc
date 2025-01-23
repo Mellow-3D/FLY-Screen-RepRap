@@ -594,6 +594,11 @@ if(buf[9]>0)
   */
  static void onUI_show() {
 
+	 std::string whmove_background = StoragePreferences::getString("whmove_background", "NULL");
+	 if(strstr(whmove_background.c_str(),"NULL") == 0){
+		 mRound_ButtonPtr->setSelected(true);
+		 mMove_XYPtr->setBackgroundPic(whmove_background.c_str());
+	 }
 
 	 //获取用户设定的最大XY值，如果没有设定默认300mm
 	 X_Axis_maximum = StoragePreferences::getInt("X_axis_maximum", 300);
@@ -608,25 +613,15 @@ if(buf[9]>0)
 	 Leveling_init();
 	 display_value.run("this is thread name");
 	 Command_Feedback.push_back("Click here to send order") ;
-//	 	sprintf(id, "%d%d%d%d%d%d%d%d", devID[0],devID[1],devID[2],devID[3],devID[4],devID[5],devID[6],devID[7]);
 
-//	 	char* lock = strstr(key2, id);//验证当前屏幕id是否在key里
-
-//	  if (lock == NULL){
-//		 mTextview38Ptr->setText(id);
-//
-//	    	mczzxPtr->setVisible(true);
-//
-//	 	}
 
  	std::string key = StoragePreferences::getString("key", "");
 
  	if(strcmp(key.c_str(),"")==0){
- //	 		mMainMenuPtr->setVisible(true);
- 		}
- 	else{
+
+ 	}else{
      if(strcmp(key.c_str(),"0")>0){
-     mlockPtr->setVisible(true);
+    	 mlockPtr->setVisible(true);
      }
  	}
 
@@ -3015,8 +3010,8 @@ static void onListItemClick_ListView5(ZKListView *pListView, int index, int id) 
 static bool onButtonClick_Button9(ZKButton *pButton) {
    // LOGD(" ButtonClick Button9 !!!\n");
 	 currmode = 0;
-	 print_file_path = "M20 S2 P0:/gcodes";
-	 Hardware_serial_transmission("M20 S2 P0:/gcodes\r\n");
+	 print_file_path = "M20 S2 P\"0:/gcodes\"";
+	 Hardware_serial_transmission("M20 S2 P\"0:/gcodes\"\r\n");
 	 mboardsdPtr->setVisible(true);
 	 mfishPtr->setVisible(false);
     return false;
@@ -3030,7 +3025,7 @@ static bool onButtonClick_Button10(ZKButton *pButton) {
 	sprintf(macros_print_patha,"M98 P\"0:/macros/");
 	sprintf(macros_print_path,"M98 P\"0:/macros/");
 	currmode = 1;
-	 Hardware_serial_transmission("M20 S2 P0:/macros\r\n");
+	Hardware_serial_transmission("M20 S2 P\"0:/macros\"\r\n");
 	// snprintf(macros_print_path, sizeof(macros_print_path), "M98 P\"0:/macros/");
 
 	 mboardsdPtr->setVisible(true);
@@ -3607,13 +3602,11 @@ static bool onButtonClick_Button49(ZKButton *pButton) {
 }
 static bool onButtonClick_Button51(ZKButton *pButton) {
 	if (!pButton->isSelected()){
-			 			Hardware_serial_transmission("M280 P0 S10\r\n");
-			 			}
-			 			else{
-			 				Hardware_serial_transmission("M280 P0 S90\r\n");
-
-			 			}
-			 			pButton->setSelected(!pButton->isSelected());
+			Hardware_serial_transmission("M280 P0 S10\r\n");
+	}else{
+			 Hardware_serial_transmission("M280 P0 S90\r\n");
+	}
+	pButton->setSelected(!pButton->isSelected());
     return false;
 }
 static bool onButtonClick_Button50(ZKButton *pButton) {
@@ -3651,16 +3644,20 @@ static bool onButtonClick_Move_XY(ZKButton *pButton) {
 //LOGD("x最大值%d,%f:%d",X_Axis_maximum,Move_Resolution_X,pixel_x);
 
 	char buf[30];
-				sprintf(buf,"G1 X%0.2f Y%0.2f",Move_Resolution_X*pixel_x,Move_Resolution_Y*pixel_y);
-			Hardware_serial_transmission("G90\r\n");
-			Hardware_serial_transmission(buf);
-			if(strcmp(xyspeedf.c_str(),"")!=0){
-				Hardware_serial_transmission(" F");
- 				Hardware_serial_transmission(xyspeedf);
- 				Hardware_serial_transmission("\r\n");
- 			}
- 			else
-			Hardware_serial_transmission(" F2500\r\n");
+	if(mRound_ButtonPtr->isSelected()){
+		sprintf(buf,"G1 X%0.2f Y%0.2f",Move_Resolution_X*pixel_x - X_Axis_maximum/2 ,Move_Resolution_Y*pixel_y - Y_Axis_maximum/2 );
+	}else{
+		sprintf(buf,"G1 X%0.2f Y%0.2f",Move_Resolution_X*pixel_x,Move_Resolution_Y*pixel_y);
+	}
+
+	Hardware_serial_transmission("G90\r\n");
+	Hardware_serial_transmission(buf);
+	if(strcmp(xyspeedf.c_str(),"")!=0){
+		Hardware_serial_transmission(" F");
+ 		Hardware_serial_transmission(xyspeedf);
+ 		Hardware_serial_transmission("\r\n");
+ 	}else
+ 		Hardware_serial_transmission(" F2500\r\n");
 
     LayoutPosition coordinate(Motion_Event_X-coordinate_pos.mWidth/2, Motion_Event_Y-coordinate_pos.mHeight, coordinate_pos.mWidth, coordinate_pos.mHeight);
     mcoordinatePtr->setPosition(coordinate);
@@ -3694,4 +3691,18 @@ static bool onButtonClick_Y_Value(ZKButton *pButton) {
 }
 static void onProgressChanged_SeekBar4(ZKSeekBar *pSeekBar, int progress) {
     //LOGD(" ProgressChanged SeekBar4 %d !!!\n", progress);
+}
+
+static bool onButtonClick_Round_Button(ZKButton *pButton) {
+	pButton->setSelected(!pButton->isSelected());
+	if(pButton->isSelected()){
+		mMove_XYPtr->setBackgroundPic("/wh/whmove_round_background.png");
+		StoragePreferences::putString("whmove_background", "/wh/whmove_round_background.png");
+	}else{
+		mMove_XYPtr->setBackgroundPic("/wh/whmoceCoordinate_background.png");
+		StoragePreferences::putString("whmove_background", "NULL");
+	}
+
+
+    return false;
 }

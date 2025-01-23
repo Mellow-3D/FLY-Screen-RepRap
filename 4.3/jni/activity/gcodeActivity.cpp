@@ -4,6 +4,7 @@
 #include "gcodeActivity.h"
 
 /*TAG:GlobalVariable全局变量*/
+static ZKButton* mRound_ButtonPtr;
 static ZKButton* mY_ValuePtr;
 static ZKButton* mX_ValuePtr;
 static ZKSeekBar* mX_axis_maximumPtr;
@@ -331,6 +332,7 @@ typedef struct {
 
 /*TAG:ButtonCallbackTab按键映射表*/
 static S_ButtonCallback sButtonCallbackTab[] = {
+    ID_GCODE_Round_Button, onButtonClick_Round_Button,
     ID_GCODE_Y_Value, onButtonClick_Y_Value,
     ID_GCODE_X_Value, onButtonClick_X_Value,
     ID_GCODE_Move_XY, onButtonClick_Move_XY,
@@ -588,6 +590,7 @@ gcodeActivity::~gcodeActivity() {
     EASYUICONTEXT->unregisterGlobalTouchListener(this);
     onUI_quit();
     unregisterProtocolDataUpdateListener(onProtocolDataUpdate);
+    mRound_ButtonPtr = NULL;
     mAnti_touchPtr = NULL;
     mMessage_Report_ClosePtr = NULL;
     mMessage_ReportPtr = NULL;
@@ -887,6 +890,7 @@ const char* gcodeActivity::getAppName() const{
 //TAG:onCreate
 void gcodeActivity::onCreate() {
 	Activity::onCreate();
+    mRound_ButtonPtr = (ZKButton*)findControlByID(ID_GCODE_Round_Button);
     mY_ValuePtr = (ZKButton*)findControlByID(ID_GCODE_Y_Value);
     mX_ValuePtr = (ZKButton*)findControlByID(ID_GCODE_X_Value);
     mY_ValuePtr = (ZKTextView*)findControlByID(ID_GCODE_Y_Value);

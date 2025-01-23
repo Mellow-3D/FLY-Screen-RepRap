@@ -26,6 +26,7 @@
 #include "window/ZKSlideWindow.h"
 
 /*TAG:Macro宏ID*/
+#define ID_GCODE_Round_Button    20064
 #define ID_GCODE_Y_Value    20063
 #define ID_GCODE_X_Value    20062
 #define ID_GCODE_X_axis_maximum    91010

@@ -594,6 +594,11 @@ if(buf[9]>0)
   */
  static void onUI_show() {
 
+	 std::string whmove_background = StoragePreferences::getString("whmove_background", "NULL");
+	 if(strstr(whmove_background.c_str(),"NULL") == 0){
+		 mRound_ButtonPtr->setSelected(true);
+		 mMove_XYPtr->setBackgroundPic(whmove_background.c_str());
+	 }
 
 	 //获取用户设定的最大XY值，如果没有设定默认300mm
 	 X_Axis_maximum = StoragePreferences::getInt("X_axis_maximum", 300);
@@ -608,25 +613,15 @@ if(buf[9]>0)
 	 Leveling_init();
 	 display_value.run("this is thread name");
 	 Command_Feedback.push_back("Click here to send order") ;
-//	 	sprintf(id, "%d%d%d%d%d%d%d%d", devID[0],devID[1],devID[2],devID[3],devID[4],devID[5],devID[6],devID[7]);
 
-//	 	char* lock = strstr(key2, id);//验证当前屏幕id是否在key里
-
-//	  if (lock == NULL){
-//		 mTextview38Ptr->setText(id);
-//
-//	    	mczzxPtr->setVisible(true);
-//
-//	 	}
 
  	std::string key = StoragePreferences::getString("key", "");
 
  	if(strcmp(key.c_str(),"")==0){
- //	 		mMainMenuPtr->setVisible(true);
- 		}
- 	else{
+
+ 	}else{
      if(strcmp(key.c_str(),"0")>0){
-     mlockPtr->setVisible(true);
+    	 mlockPtr->setVisible(true);
      }
  	}
 
@@ -703,7 +698,7 @@ void IPaddress(string strLine){
  // 处理没有ok的字符串
  void processPrinterCodeLine(string strLine) {
 
-	//LOGD("串口反馈：%s",strLine.c_str());
+	LOGD("串口反馈：%s",strLine.c_str());
 
 	 //打印结束设置进度条
 	 if(strstr(strLine.c_str(),"Finished printing")){
@@ -841,17 +836,17 @@ void IPaddress(string strLine){
 				   QOIUtils::set_qoi_image(mTextView9Ptr, Thumbnails_set.data.c_str());//解析当前的缩略图数据//Parse the current thumbnail data
 
 			   }else{ //已经接收完所有的QOI数据
-					 //After receiving all QOI data
-				   if(Thumbnails_set.format == "qoi"){
-						QOIUtils::set_qoi_image(mTextView9Ptr, Thumbnails_set.data.c_str());//解析缩略图数据//Parse Thumbnail Data
-						Thumbnails_set.data.clear();                                        //清理缩略图数据//Clean up thumbnail data
-						Thumbnails_set.fileName.clear();                                    //清理文件名        //clean filename
+						 //After receiving all QOI data
+					   if(Thumbnails_set.format == "qoi"){
+							QOIUtils::set_qoi_image(mTextView9Ptr, Thumbnails_set.data.c_str());//解析缩略图数据//Parse Thumbnail Data
+							Thumbnails_set.data.clear();                                        //清理缩略图数据//Clean up thumbnail data
+							Thumbnails_set.fileName.clear();                                    //清理文件名        //clean filename
 
-				   }else if(Thumbnails_set.format == "png"){
-					   make_thumbnail(Thumbnails_set.data);
-					   mTextView9Ptr->setBackgroundPic("/tmp/Print_Thumbnails.png");
-				   }
-		       }
+					   }else if(Thumbnails_set.format == "png"){
+						   make_thumbnail(Thumbnails_set.data);
+						   mTextView9Ptr->setBackgroundPic("/tmp/Print_Thumbnails.png");
+					   }
+			       }
 
 		   }
 
@@ -880,8 +875,8 @@ void IPaddress(string strLine){
 //		        	  if (root.isMember("height")){//获得缩略图高度 //get thumbnail height
 //		        		  Thumbnails_set.height = root["height"].asInt();
 //		        	  }
-	        	  
-				  if (root.isMember("format")){//获得缩略图首次偏移量 //get thumbnail first offset
+
+	        	  if (root.isMember("format")){//获得缩略图首次偏移量 //get thumbnail first offset
 	        		  Thumbnails_set.format = root["format"].asString();
 	        	  }
 
@@ -1138,55 +1133,55 @@ if(xztime<0){//卸载按钮动画展示
 
  	 int timeb;
       switch (ev.mActionStatus) {
-  		case MotionEvent::E_ACTION_DOWN://触摸按下 touch press
+  		case MotionEvent::E_ACTION_DOWN://触摸按下
   			//LOGD("时刻 = %ld 坐标  x = %d, y = %d", ev.mEventTime, ev.mX, ev.mY);
   			Motion_Event_X = ev.mX;
   			Motion_Event_Y = ev.mY;
 
 
-  			//双击归位 double click
+  			//双击归位
   			  if(StoragePreferences::getBool("SJ", false)){
   			  timeb =getCurrentTime();
   			 		 	if((timeb - timea < StoragePreferences::getInt("SJtime", 160))&&canSend==false)
   			 		Hardware_serial_transmission("G28\r\n");
   			 		 	timea = timeb;}
 
-  			  if(StoragePreferences::getBool("pmcs", false)){//读取是否开启了休眠 Read whether hibernation is enabled
+  			  if(StoragePreferences::getBool("pmcs", false)){//读取是否开启了休眠
   							 cstimea = 0;}
 
 
   			break;
-  		case MotionEvent::E_ACTION_MOVE://触摸滑动 touch slide
+  		case MotionEvent::E_ACTION_MOVE://触摸滑动
   			break;
   		case MotionEvent::E_ACTION_UP:
 
-  			//定时休眠开启屏幕 Scheduled sleep to turn on the screen
+  			//定时休眠开启屏幕
 
-				  if(!BRIGHTNESSHELPER->isScreenOn()){//屏幕背光关闭中 screen backlight off
+				  if(!BRIGHTNESSHELPER->isScreenOn()){//屏幕背光关闭中
 				   BRIGHTNESSHELPER->screenOn();
-				   mAnti_touchPtr->setVisible(false); //抬起后关闭防触摸界面 Turn off touch-resistant interface when lifted
+				   mAnti_touchPtr->setVisible(false); //抬起后关闭防触摸界面
 				   cstimea = 0;
 			  }
 
-			  //触摸抬起 touch up
+			  //触摸抬起
   			break;
   		default:
   			break;
   	}
   	return false;
   }
- static bool onButtonClick_btnPause(ZKButton *pButton) {//暂停打印 pause printing
+ static bool onButtonClick_btnPause(ZKButton *pButton) {//暂停打印
      //LOGD(" ButtonClick btnPause !!!\n");
 
- 	if (!pButton->isSelected()) {//如果暂停 if pause
+ 	if (!pButton->isSelected()) {//如果暂停
 
     canSend = false;
     can_in = 0;
  	Hardware_serial_transmission("M25\r\n");
- 	mbtnPausePtr->setTextTr("continue");//显示 show
+ 	mbtnPausePtr->setTextTr("continue");//显示
  	}
  	else{
- 	mbtnPausePtr->setTextTr("Pause");//显示 show
+ 	mbtnPausePtr->setTextTr("Pause");//显示
  	Hardware_serial_transmission("M24\r\n");
  	canSend = true;
  	 can_in = 1;
@@ -1296,13 +1291,13 @@ if(xztime<0){//卸载按钮动画展示
  		break;
  	}
  }
- static bool onButtonClick_btnBack(ZKButton *pButton) {//********************************************停止打印******************************************************************************* stop printing
+ static bool onButtonClick_btnBack(ZKButton *pButton) {//********************************************停止打印*******************************************************************************
      //LOGD(" ButtonClick btnBack !!!\n");
 	 Hardware_serial_transmission("M25\r\n");
 	 Hardware_serial_transmission("M0\r\n");
 //
-// 	if(statkg != 0)//如果没打印完 if not printed
-// 	printcel=1;//取消打印标志 cancel print sign
+// 	if(statkg != 0)//如果没打印完
+// 	printcel=1;//取消打印标志
 // 	canSend = false;
 // 	gcode.clear();
  	mwinPrintPtr->hideWnd();
@@ -3607,25 +3602,22 @@ static bool onButtonClick_Button49(ZKButton *pButton) {
 }
 static bool onButtonClick_Button51(ZKButton *pButton) {
 	if (!pButton->isSelected()){
-			 			Hardware_serial_transmission("M280 P0 S10\r\n");
-			 			}
-			 			else{
-			 				Hardware_serial_transmission("M280 P0 S90\r\n");
-
-			 			}
-			 			pButton->setSelected(!pButton->isSelected());
+			Hardware_serial_transmission("M280 P0 S10\r\n");
+	}else{
+			 Hardware_serial_transmission("M280 P0 S90\r\n");
+	}
+	pButton->setSelected(!pButton->isSelected());
     return false;
 }
 static bool onButtonClick_Button50(ZKButton *pButton) {
  //   LOGD(" ButtonClick Button50 !!!\n");
 
 	 if (!pButton->isSelected()){
-		  mTextView62Ptr->setVisible(true);
-	 			 			}
+		 mTextView62Ptr->setVisible(true);
+	 }
 	 else{
-	 			 mTextView62Ptr->setVisible(false);
-
-	 			 			}
+		 mTextView62Ptr->setVisible(false);
+	 }
 	 pButton->setSelected(!pButton->isSelected());
 
     return false;
@@ -3652,16 +3644,20 @@ static bool onButtonClick_Move_XY(ZKButton *pButton) {
 //LOGD("x最大值%d,%f:%d",X_Axis_maximum,Move_Resolution_X,pixel_x);
 
 	char buf[30];
-				sprintf(buf,"G1 X%0.2f Y%0.2f",Move_Resolution_X*pixel_x,Move_Resolution_Y*pixel_y);
-			Hardware_serial_transmission("G90\r\n");
-			Hardware_serial_transmission(buf);
-			if(strcmp(xyspeedf.c_str(),"")!=0){
-				Hardware_serial_transmission(" F");
- 				Hardware_serial_transmission(xyspeedf);
- 				Hardware_serial_transmission("\r\n");
- 			}
- 			else
-			Hardware_serial_transmission(" F2500\r\n");
+	if(mRound_ButtonPtr->isSelected()){
+		sprintf(buf,"G1 X%0.2f Y%0.2f",Move_Resolution_X*pixel_x - X_Axis_maximum/2 ,Move_Resolution_Y*pixel_y - Y_Axis_maximum/2 );
+	}else{
+		sprintf(buf,"G1 X%0.2f Y%0.2f",Move_Resolution_X*pixel_x,Move_Resolution_Y*pixel_y);
+	}
+
+	Hardware_serial_transmission("G90\r\n");
+	Hardware_serial_transmission(buf);
+	if(strcmp(xyspeedf.c_str(),"")!=0){
+		Hardware_serial_transmission(" F");
+ 		Hardware_serial_transmission(xyspeedf);
+ 		Hardware_serial_transmission("\r\n");
+ 	}else
+ 		Hardware_serial_transmission(" F2500\r\n");
 
     LayoutPosition coordinate(Motion_Event_X-coordinate_pos.mWidth/2, Motion_Event_Y-coordinate_pos.mHeight, coordinate_pos.mWidth, coordinate_pos.mHeight);
     mcoordinatePtr->setPosition(coordinate);
@@ -3691,5 +3687,22 @@ static bool onButtonClick_X_Value(ZKButton *pButton) {
 static bool onButtonClick_Y_Value(ZKButton *pButton) {
 	curprintcs = 51 ;
 	 mAJPtr->setVisible(true);
+    return false;
+}
+static void onProgressChanged_SeekBar4(ZKSeekBar *pSeekBar, int progress) {
+    //LOGD(" ProgressChanged SeekBar4 %d !!!\n", progress);
+}
+
+static bool onButtonClick_Round_Button(ZKButton *pButton) {
+	pButton->setSelected(!pButton->isSelected());
+	if(pButton->isSelected()){
+		mMove_XYPtr->setBackgroundPic("/wh/whmove_round_background.png");
+		StoragePreferences::putString("whmove_background", "/wh/whmove_round_background.png");
+	}else{
+		mMove_XYPtr->setBackgroundPic("/wh/whmoceCoordinate_background.png");
+		StoragePreferences::putString("whmove_background", "NULL");
+	}
+
+
     return false;
 }

@@ -101,6 +101,7 @@
     
     <string name="Please click to enter the power-on password">请输入开机密码</string>
     <string name="Confirm">确认</string>
+    <string name="Round">圆形</string>
 </resources>
 
 
